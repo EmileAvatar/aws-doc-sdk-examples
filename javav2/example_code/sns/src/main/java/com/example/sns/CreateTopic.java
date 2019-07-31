@@ -55,7 +55,7 @@ public class CreateTopic {
                 .build();
 
         CreateTopicResponse result = snsClient.createTopic(request);
-        System.out.println("\n\nStatus was " + result.sdkHttpResponse().statusCode() + "\n\nCreated topic " + topicName + "with Arn: " + result.topicArn());
+        System.out.println("\n\nStatus was " + result.sdkHttpResponse().statusCode() + "\n\nCreated topic " + topicName + " with Arn: " + result.topicArn());
         //snippet-end:[sns.java2.CreateTopic.main]
     }
 }

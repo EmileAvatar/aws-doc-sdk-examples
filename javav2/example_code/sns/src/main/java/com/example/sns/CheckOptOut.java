@@ -54,8 +54,12 @@ public class CheckOptOut {
 
         CheckIfPhoneNumberIsOptedOutResponse result = snsClient.checkIfPhoneNumberIsOptedOut(request);
 
-        System.out.println(result.isOptedOut() + "Phone Number " + phoneNumber + " has Opted Out of receiving sns messages." +
-                "\n\nStatus was " + result.sdkHttpResponse().statusCode());
+        if (result.isOptedOut()) {
+            System.out.println("Phone Number " + phoneNumber + " has Opted Out of receiving sns messages.");
+        } else {
+            System.out.println("Phone Number " + phoneNumber + " has not Opted Out of receiving sns messages.");
+        }
+        System.out.println("Status was " + result.sdkHttpResponse().statusCode());
         //snippet-end:[sns.java2.CheckOptOut.main]
     }
 }
