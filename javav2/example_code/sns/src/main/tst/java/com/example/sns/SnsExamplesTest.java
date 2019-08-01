@@ -4,7 +4,10 @@ import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
-import software.amazon.awssdk.services.sns.model.*;
+import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
+import software.amazon.awssdk.services.sns.model.ListSubscriptionsRequest;
+import software.amazon.awssdk.services.sns.model.ListTopicsRequest;
+import software.amazon.awssdk.services.sns.model.Subscription;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
@@ -12,7 +15,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SnsExamplesTest {
@@ -28,7 +30,7 @@ public class SnsExamplesTest {
     }
 
     SnsClient snsClient = SnsClient.builder().region(Region.US_EAST_1).build();
-    Subscription subscription =  snsClient.listSubscriptions(ListSubscriptionsRequest.builder().build()).subscriptions().get(0);
+    Subscription subscription = snsClient.listSubscriptions(ListSubscriptionsRequest.builder().build()).subscriptions().get(0);
     String topicArn = subscription.topicArn();
     String subscriptionToken = "";
     String validSubscriptionEndpoint = subscription.endpoint();
@@ -68,7 +70,7 @@ public class SnsExamplesTest {
         System.out.println(output);
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "CheckOptOut should print a response");
+        assertTrue(output.length() > 0, "CheckOptOut should print a response");
 
 
     }
@@ -90,7 +92,7 @@ public class SnsExamplesTest {
         System.out.println(output);
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "ConfirmSubscription should print a response");
+        assertTrue(output.length() > 0, "ConfirmSubscription should print a response");
 
 
     }
@@ -116,9 +118,8 @@ public class SnsExamplesTest {
         int newTotalTopics = snsClient.listTopics(ListTopicsRequest.builder().build()).topics().size();
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "CreateTopic should print a response");
-        assertEquals("CreateTopic should add a new Topic", totalTopics +1, newTotalTopics );
-
+        assertTrue(output.length() > 0, "CreateTopic should print a response");
+        assertEquals("CreateTopic should add a new Topic", totalTopics + 1, newTotalTopics);
 
 
     }
@@ -128,7 +129,7 @@ public class SnsExamplesTest {
         //GIVEN
         DeleteTopic deleteTopic = new DeleteTopic();
         String topicName = "test";
-        String topicArn =  snsClient.createTopic(CreateTopicRequest.builder().name(topicName).build()).topicArn();
+        String topicArn = snsClient.createTopic(CreateTopicRequest.builder().name(topicName).build()).topicArn();
         String[] args = new String[]{topicArn};
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         System.setOut(new PrintStream(buffer));
@@ -145,9 +146,8 @@ public class SnsExamplesTest {
         int newTotalTopics = snsClient.listTopics(ListTopicsRequest.builder().build()).topics().size();
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "DeleteTopic should print a response");
-        assertEquals("DeleteTopic should remove a Topic", totalTopics - 1, newTotalTopics );
-
+        assertTrue(output.length() > 0, "DeleteTopic should print a response");
+        assertEquals("DeleteTopic should remove a Topic", totalTopics - 1, newTotalTopics);
 
 
     }
@@ -169,7 +169,7 @@ public class SnsExamplesTest {
         System.out.println(output);
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "GetSMSAtrributes should print a response");
+        assertTrue(output.length() > 0, "GetSMSAtrributes should print a response");
 
 
     }
@@ -179,7 +179,7 @@ public class SnsExamplesTest {
         //GIVEN
         GetTopicAttributes getTopicAttributes = new GetTopicAttributes();
         String topicName = "test";
-        String topicArn =  snsClient.createTopic(CreateTopicRequest.builder().name(topicName).build()).topicArn();
+        String topicArn = snsClient.createTopic(CreateTopicRequest.builder().name(topicName).build()).topicArn();
         String[] args = new String[]{topicArn};
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         System.setOut(new PrintStream(buffer));
@@ -193,7 +193,7 @@ public class SnsExamplesTest {
         System.out.println(output);
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "GetTopicAttributes should print a response");
+        assertTrue(output.length() > 0, "GetTopicAttributes should print a response");
 
 
     }
@@ -215,7 +215,7 @@ public class SnsExamplesTest {
         System.out.println(output);
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "ListOptOut should print a response");
+        assertTrue(output.length() > 0, "ListOptOut should print a response");
 
 
     }
@@ -237,7 +237,7 @@ public class SnsExamplesTest {
         System.out.println(output);
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "ListSubscriptions should print a response");
+        assertTrue(output.length() > 0, "ListSubscriptions should print a response");
 
 
     }
@@ -259,13 +259,64 @@ public class SnsExamplesTest {
         System.out.println(output);
 
         //THEN - throw Illegal Argument Exception
-        assertTrue(output.length() > 0 , "ListTopics should print a response");
+        assertTrue(output.length() > 0, "ListTopics should print a response");
 
 
     }
 
+    @Test
+    public void PublishTextSMS_returnsSuccessful() {
+        //GIVEN
+        PublishTextSMS publishTextSMS = new PublishTextSMS();
+        String phoneNumber = "+155555555555";
+        String[] args = new String[]{phoneNumber};
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(buffer));
+
+        //WHEN - compute the average
+        publishTextSMS.main(args);
+
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+        String output = buffer.toString();
+        buffer.reset();
+        System.out.println(output);
+
+        //THEN - throw Illegal Argument Exception
+        assertTrue(output.length() > 0, "CheckOptOut should print a response");
+    }
+
+    @Test
+    public void PublishTopic_returnsSuccessful() {
+    }
+
+    @Test
+    public void SetSMSAttributes_returnsSuccessful() {
+    }
+
+    @Test
+    public void SetTopicAttributes_returnsSuccessful() {
+    }
 
 
+    @Test
+    public void SubscribeEmail_returnsSuccessful() {
+    }
+
+    @Test
+    public void SubscribeHTTPS_returnsSuccessful() {
+    }
+
+    @Test
+    public void SubscribeLambda_returnsSuccessful() {
+    }
+
+    @Test
+    public void SubscribeTextSMS_returnsSuccessful() {
+    }
+
+    @Test
+    public void Unsubscribe_returnsSuccessful() {
+    }
 
 
 }
