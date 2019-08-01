@@ -36,11 +36,11 @@ public class SetTopicAttributes {
     public static void main(String[] args) {
         final String USAGE = "\n" +
                 "SetTopicAttributes - update defaults from a topic.\n" +
-                "Usage: SetTopicAttributes <attribute> <topicArn> <value>\n\n" +
+                "Usage: SetTopicAttributes <attribute> <value> <topicArn>\n\n" +
                 "Where:\n" +
                 "  attribute - Attribute action to use. Valid parameters : Policy | DisplayName | DeliveryPolicy .\n" +
-                "  topicArn - The arn of the topic to update. \n" +
-                "  value - New value for the attribute.\n\n";
+                "  value - New value for the attribute.\n" +
+                "  topicArn - The arn of the topic to update. \n\n";
 
         if (args.length < 3) {
             System.out.println(USAGE);
@@ -49,8 +49,8 @@ public class SetTopicAttributes {
 
         //snippet-start:[sns.java2.SetTopicAttributes.main]
         String attribute = args[0];
-        String topicArn = args[1];
-        String value = args[2];
+        String  value = args[1];
+        String topicArn = args[2];
 
         SnsClient snsClient = SnsClient.builder().region(Region.US_EAST_1).build();
 
